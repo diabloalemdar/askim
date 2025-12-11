@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seni Seviyorum ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(180deg, #0d0d15 0%, #111827 100%);
+            min-height: 100vh;
+        }
+
+        .screen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background Effects */
+        .bg-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .glow-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #f472b6 0%, transparent 70%);
+            top: -100px;
+            left: -50px;
+        }
+
+        .glow-2 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #a855f7 0%, transparent 70%);
+            top: -80px;
+            right: -50px;
+        }
+
+        /* Floating Hearts */
+        .heart {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0;
+            animation: floatHeart 8s infinite ease-in-out;
+            pointer-events: none;
+            filter: blur(2px);
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(0) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Splash Screen */
+        #splash {
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out forwards;
+            transition: opacity 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .splash-content {
+            text-align: center;
+            z-index: 1;
+        }
+
+        .main-text {
+            font-size: clamp(32px, 8vw, 48px);
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 20px rgba(244, 114, 182, 0.5);
+        }
+
+        .sub-text {
+            font-size: clamp(16px, 4vw, 20px);
+            font-weight: 400;
+            color: #e5e7eb;
+            margin-bottom: 60px;
+        }
+
+        .btn {
+            padding: 18px 60px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(244, 114, 182, 0.4);
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            min-width: 200px;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 4px 20px rgba(244, 114, 182, 0.6);
+        }
+
+        /* Proposal Screen */
+        #proposal {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s ease-out;
+        }
+
+        #proposal.active {
+            display: flex;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .proposal-content {
+            text-align: center;
+            z-index: 1;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .question-text {
+            font-size: clamp(28px, 7vw, 40px);
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 40px;
+            text-shadow: 0 4px 20px rgba(244, 114, 182, 0.5);
+        }
+
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .btn-no {
+            padding: 18px 60px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(107, 114, 128, 0.4);
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            min-width: 200px;
+        }
+
+        .btn-no:active {
+            transform: scale(0.95);
+            box-shadow: 0 4px 20px rgba(107, 114, 128, 0.6);
+        }
+
+        /* Thoughts Section */
+        .thoughts-section {
+            width: 100%;
+            margin-top: 40px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s ease-out, opacity 0.6s ease-out;
+            opacity: 0;
+        }
+
+        .thoughts-section.open {
+            max-height: 600px;
+            opacity: 1;
+        }
+
+        .thoughts-title {
+            font-size: clamp(22px, 5vw, 28px);
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 20px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(244, 114, 182, 0.3);
+            border-radius: 20px;
+            resize: vertical;
+            outline: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .textarea:focus {
+            border-color: #f472b6;
+            box-shadow: 0 0 20px rgba(244, 114, 182, 0.3);
+        }
+
+        .send-btn {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .info-text {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #9ca3af;
+            text-align: center;
+        }
+
+        /* Hide screen transitions */
+        .screen.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Rejection Screen */
+        #rejection {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s ease-out;
+        }
+
+        #rejection.active {
+            display: flex;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .rejection-content {
+            text-align: center;
+            z-index: 1;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .sad-emoji {
+            font-size: clamp(80px, 20vw, 120px);
+            margin-bottom: 30px;
+            animation: heartbreak 1s ease-out;
+        }
+
+        @keyframes heartbreak {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2) rotate(-10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .sad-text {
+            font-size: clamp(24px, 6vw, 32px);
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 20px rgba(107, 114, 128, 0.5);
+        }
+
+        .sad-subtext {
+            font-size: clamp(16px, 4vw, 18px);
+            font-weight: 400;
+            color: #9ca3af;
+            margin-bottom: 50px;
+            line-height: 1.6;
+        }
+
+        .btn-back {
+            padding: 18px 60px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(244, 114, 182, 0.4);
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            min-width: 200px;
+        }
+
+        .btn-back:active {
+            transform: scale(0.95);
+            box-shadow: 0 4px 20px rgba(244, 114, 182, 0.6);
+        }
+
+        /* Prevent horizontal scroll */
+        html {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        body {
+            width: 100%;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splash" class="screen">
+        <div class="bg-glow glow-1"></div>
+        <div class="bg-glow glow-2"></div>
+        
+        <div class="splash-content">
+            <h1 class="main-text">Seni seviyorum Ada'm ❤️</h1>
+            <p class="sub-text">Hayatım senden bir şey isteyeceğim…</p>
+            <button class="btn" onclick="goToProposal()">Devam et</button>
+        </div>
+    </div>
+
+    <!-- Proposal Screen -->
+    <div id="proposal" class="screen">
+        <div class="bg-glow glow-1"></div>
+        <div class="bg-glow glow-2"></div>
+        
+        <div class="proposal-content">
+            <h1 class="question-text">Benimle çıkar mısın?</h1>
+            <div class="buttons-container">
+                <button class="btn" onclick="showThoughts()">Evet 💗</button>
+                <button class="btn-no" onclick="showRejection()">Hayır 💔</button>
+            </div>
+            
+            <div id="thoughtsSection" class="thoughts-section">
+                <h2 class="thoughts-title">Düşüncelerin</h2>
+                <textarea 
+                    id="thoughtsText" 
+                    class="textarea" 
+                    placeholder="AYNISINI KARŞINDADA  YAPICAM Buraya hissettiklerini yazmak ister misin? 💬"
+                ></textarea>
+                <button class="btn send-btn" onclick="sendMessage()">Gönder</button>
+                <p class="info-text"> HENÜZ DATABASE KURMADIM O YÜZDEN SS ALIN VE Görüşlerinizi bize WhatsApp hattımızdan ulaştırın.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rejection Screen -->
+    <div id="rejection" class="screen">
+        <div class="bg-glow glow-1"></div>
+        <div class="bg-glow glow-2"></div>
+        
+        <div class="rejection-content">
+            <div class="sad-emoji">💔</div>
+            <h1 class="sad-text">Üzgünüm...</h1>
+            <p class="sad-subtext">Kalbim kırıldı ama senin mutluluğun benim için önemli. Belki başka zaman? 🥺</p>
+            <button class="btn-back" onclick="goBackToProposal()">Tekrar Düşün 💕</button>
+        </div>
+    </div>
+
+    <script>
+        // Create floating hearts
+        function createHearts() {
+            const heartContainer = document.body;
+            const heartEmojis = ['💗', '💖', '💕', '💓', '💞'];
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.style.animationDuration = (6 + Math.random() * 4) + 's';
+                
+                heartContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 10000);
+            }, 2000);
+        }
+
+        createHearts();
+
+        // Go to proposal screen
+        function goToProposal() {
+            const splash = document.getElementById('splash');
+            const proposal = document.getElementById('proposal');
+            
+            splash.classList.add('hide');
+            
+            setTimeout(() => {
+                splash.style.display = 'none';
+                proposal.classList.add('active');
+            }, 600);
+        }
+
+        // Show thoughts section
+        function showThoughts() {
+            const thoughtsSection = document.getElementById('thoughtsSection');
+            thoughtsSection.classList.add('open');
+        }
+
+        // Show rejection screen
+        function showRejection() {
+            const proposal = document.getElementById('proposal');
+            const rejection = document.getElementById('rejection');
+            
+            proposal.classList.add('hide');
+            
+            setTimeout(() => {
+                proposal.style.display = 'none';
+                rejection.classList.add('active');
+            }, 600);
+        }
+
+        // Go back to proposal screen
+        function goBackToProposal() {
+            const rejection = document.getElementById('rejection');
+            const proposal = document.getElementById('proposal');
+            
+            rejection.classList.remove('active');
+            rejection.classList.add('hide');
+            
+            setTimeout(() => {
+                rejection.style.display = 'none';
+                proposal.style.display = 'flex';
+                proposal.classList.remove('hide');
+                proposal.classList.add('active');
+            }, 600);
+        }
+
+        // Send message via WhatsApp
+        function sendMessage() {
+            const text = document.getElementById('thoughtsText').value;
+            const phoneNumber = '905xxxxxxxxx'; // Telefon numarasını buraya ekleyin
+            
+            if (text.trim()) {
+                const message = encodeURIComponent(text);
+                window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+            } else {
+                // Boş mesaj için de WhatsApp'ı aç
+                window.open(`https://wa.me/${phoneNumber}`, '_blank');
+            }
+        }
+    </script>
+</body>
+</html>
